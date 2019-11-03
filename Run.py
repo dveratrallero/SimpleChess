@@ -2,7 +2,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class AbstractPiece(tk.Label):
-    """docstring for Piece"""
     def __init__(self, root, row, column, *args, **kwargs):
         tk.Label.__init__(self, root, *args, **kwargs)
         self.current_piece=""
@@ -486,13 +485,6 @@ class ChessApp(tk.Frame):
 def main():
     aa = tk.Tk()
     cc = ChessApp(aa)
-
-    # for y in range(8):
-    #     for x in range(8):
-    #         print(cc.SquareLabels[x][y].row, cc.SquareLabels[x][y].column)
-    # cc.SquareLabels[1][1].current_piece="Brown Pawn"
-    # print(cc.SquareLabels[1][1].current_piece)
-
     cc.mainloop()
 
 if __name__ == "__main__":
