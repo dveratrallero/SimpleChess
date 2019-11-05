@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class AbstractPiece(tk.Label):
+    """docstring for Piece"""
     def __init__(self, root, row, column, *args, **kwargs):
         tk.Label.__init__(self, root, *args, **kwargs)
         self.current_piece=""
@@ -42,91 +43,59 @@ class ChessApp(tk.Frame):
 
         self.PhotoPixel=tk.PhotoImage(width=1, height=1)
 
-        self.Brown_Pawn_Photo=ImageTk.PhotoImage(ChessApp.Brown_Pawn_Image)
-        self.Brown_Horse_Photo=ImageTk.PhotoImage(ChessApp.Brown_Horse_Image)
-        self.Brown_Knight_Photo=ImageTk.PhotoImage(ChessApp.Brown_Knight_Image)
-        self.Brown_Tower_Photo=ImageTk.PhotoImage(ChessApp.Brown_Tower_Image)
-        self.Brown_King_Photo=ImageTk.PhotoImage(ChessApp.Brown_King_Image)
-        self.Brown_Queen_Photo=ImageTk.PhotoImage(ChessApp.Brown_Queen_Image)
+        self.BrownPiecesPhotos={
+        "Pawn":   ImageTk.PhotoImage(ChessApp.Brown_Pawn_Image),
+        "Knight": ImageTk.PhotoImage(ChessApp.Brown_Horse_Image),
+        "Tower":  ImageTk.PhotoImage(ChessApp.Brown_Knight_Image),
+        "Horse":  ImageTk.PhotoImage(ChessApp.Brown_Tower_Image),
+        "King":   ImageTk.PhotoImage(ChessApp.Brown_King_Image),
+        "Queen":  ImageTk.PhotoImage(ChessApp.Brown_Queen_Image),
+        }
 
-        self.Gray_Pawn_Photo=ImageTk.PhotoImage(ChessApp.Gray_Pawn_Image)
-        self.Gray_Horse_Photo=ImageTk.PhotoImage(ChessApp.Gray_Horse_Image)
-        self.Gray_Knight_Photo=ImageTk.PhotoImage(ChessApp.Gray_Knight_Image)
-        self.Gray_Tower_Photo=ImageTk.PhotoImage(ChessApp.Gray_Tower_Image)
-        self.Gray_King_Photo=ImageTk.PhotoImage(ChessApp.Gray_King_Image)
-        self.Gray_Queen_Photo=ImageTk.PhotoImage(ChessApp.Gray_Queen_Image)
+        self.GrayPiecesPhotos={
+        "Pawn":   ImageTk.PhotoImage(ChessApp.Gray_Pawn_Image),
+        "Knight": ImageTk.PhotoImage(ChessApp.Gray_Horse_Image),
+        "Tower":  ImageTk.PhotoImage(ChessApp.Gray_Knight_Image),
+        "Horse":  ImageTk.PhotoImage(ChessApp.Gray_Tower_Image),
+        "King":   ImageTk.PhotoImage(ChessApp.Gray_King_Image),
+        "Queen":  ImageTk.PhotoImage(ChessApp.Gray_Queen_Image)
+        }
 
-        self.GrayPawns=[(6, i) for i in range(8)]
-        self.GrayKnights=[(7, 2), (7, 5)]
-        self.GrayTowers=[(7, 0), (7, 7)]
-        self.GrayHorses=[(7, 1), (7, 6)]
-        self.GrayKing=[7, 3]
-        self.GrayQueen=[7, 4]
+        self.GrayPiecesAlive={
+        "Pawn":   [(6, i) for i in range(8)],
+        "Knight": [(7, 2), (7, 5)],
+        "Tower":  [(7, 0), (7, 7)],
+        "Horse":  [(7, 1), (7, 6)],
+        "King":   [(7, 3)],
+        "Queen":  [(7, 4)]
+        }
 
-        self.GrayPiecesAlive=[self.GrayPawns, self.GrayKnights, self.GrayTowers, self.GrayHorses, self.GrayKing, self.GrayQueen]
+        self.BrownPiecesAlive={
+        "Pawn":   [(1, i) for i in range(8)],
+        "Knight": [(0, 2), (0, 5)],
+        "Tower":  [(0, 0), (0, 7)],
+        "Horse":  [(0, 1), (0, 6)],
+        "King":   [(0, 4)],
+        "Queen":  [(0, 3)]
+        }
 
-        self.BrownPawns=[(1, i) for i in range(8)]
-        self.BrownKnights=[(0, 2), (0, 5)]
-        self.BrownTowers=[(0, 0), (0, 7)]
-        self.BrownHorses=[(0, 1), (0, 6)]
-        self.BrownKing=[0, 4]
-        self.BrownQueen=[0, 3]
-
-        self.BrownPiecesAlive=[self.BrownPawns, self.BrownKnights, self.BrownTowers, self.BrownHorses, self.BrownKing, self.BrownQueen]
-
-        self.SquareLabels=[[AbstractPiece(self, y, x, image=self.PhotoPixel, width=99, height=87, compound="c") for x in range(8)] for y in range(8)]
+        self.Board=[[AbstractPiece(self, y, x, image=self.PhotoPixel, width=99, height=87, compound="c") for x in range(8)] for y in range(8)]
 
         self.CreateBoard()
 
         self.CreatePieces()
 
     def CreatePieces(self):
-        if self.BrownPawns:
-            for item in self.BrownPawns:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Brown_Pawn_Photo, "Pawn", 1)
-
-        if self.BrownHorses:
-            for item in self.BrownHorses:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Brown_Horse_Photo, "Horse", 1)
-
-        if self.BrownKnights:
-            for item in self.BrownKnights:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Brown_Knight_Photo, "Knight", 1)
-
-        if self.BrownTowers:
-            for item in self.BrownTowers:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Brown_Tower_Photo, "Tower", 1)
-
-        if self.BrownKing:
-            self.RenderPiece(self.SquareLabels[self.BrownKing[0]][self.BrownKing[1]], self.Brown_King_Photo, "King", 1)
-
-        if self.BrownQueen:
-            self.RenderPiece(self.SquareLabels[self.BrownQueen[0]][self.BrownQueen[1]], self.Brown_Queen_Photo, "Queen", 1)
-
-        if self.GrayPawns:
-            for item in self.GrayPawns:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Gray_Pawn_Photo, "Pawn", 2)
-
-        if self.GrayHorses:
-            for item in self.GrayHorses:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Gray_Horse_Photo, "Horse", 2)
-
-        if self.GrayKnights:
-            for item in self.GrayKnights:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Gray_Knight_Photo, "Knight", 2)
-
-        if self.GrayTowers:
-            for item in self.GrayTowers:
-                self.RenderPiece(self.SquareLabels[item[0]][item[1]], self.Gray_Tower_Photo, "Tower", 2)
-
-        if self.GrayKing:
-            self.RenderPiece(self.SquareLabels[self.GrayKing[0]][self.GrayKing[1]], self.Gray_King_Photo, "King", 2)
-
-        if self.GrayQueen:
-            self.RenderPiece(self.SquareLabels[self.GrayQueen[0]][self.GrayQueen[1]], self.Gray_Queen_Photo, "Queen", 2)
+        def IterRender(PieceAliveDict, PieceAlivePhoto, color):
+            for a, b in PieceAliveDict.items():
+                if b:
+                    for item in b:
+                        self.RenderPiece(self.Board[item[0]][item[1]], PieceAlivePhoto[a], a, color)
+        IterRender(self.BrownPiecesAlive, self.BrownPiecesPhotos, 1)
+        IterRender(self.GrayPiecesAlive, self.GrayPiecesPhotos, 2)
 
     def CreateBoard(self):
-        for i, row in enumerate(self.SquareLabels):
+        for i, row in enumerate(self.Board):
             for h, square in enumerate(row):
                 if (i+1)%2!=0:
                     if (h+1)%2!=0:
@@ -143,7 +112,7 @@ class ChessApp(tk.Frame):
                 square.grid(row=i, column=h)
 
     def UpdateBoard(self):
-        for row in self.SquareLabels:
+        for row in self.Board:
             for square in row:
                 square.configure(bg=square.defaulbg, image=self.PhotoPixel)
                 square.image=self.PhotoPixel
@@ -160,7 +129,17 @@ class ChessApp(tk.Frame):
         Square.color= color
         Square.update()
 
-    def PieceSelect(self, Square):
+    def EndTurn(self):
+        self.selected_square=False
+        self.selected_square_tuple=0
+        self.selected_square_moves=0
+        self.selected_piece=""
+        if self.color_turn==1:
+            self.color_turn=2
+        elif self.color_turn==2:
+            self.color_turn=1
+
+    def ExecuteMove(self, Square):
         def MovePiece(Square, piecename, piecearr):
             if self.selected_piece==piecename:
                 for item in piecearr:
@@ -170,11 +149,16 @@ class ChessApp(tk.Frame):
                         holder[0]=Square.row
                         holder[1]=Square.column
                         piecearr.append(tuple(holder))
-        def MovePieceTwo(Square, piecename, piecearr):
-            if self.selected_piece==piecename:
-                if piecearr[0]==self.selected_square_tuple[0] and piecearr[1]==self.selected_square_tuple[1]:
-                    piecearr[0]=Square.row
-                    piecearr[1]=Square.column
+        for item in self.selected_square_moves:
+            if Square.row==item[0] and Square.column==item[1]:
+                if Square.current_piece!="":
+                    self.EatPiece(Square)
+                if self.color_turn==1:
+                    MovePiece(Square, self.selected_piece, self.BrownPiecesAlive[self.selected_piece])
+                elif self.color_turn==2:
+                    MovePiece(Square, self.selected_piece, self.GrayPiecesAlive[self.selected_piece])
+
+    def PieceSelect(self, Square):
         if not Square.selected and not self.selected_square and Square.color==self.color_turn:
             Square.configure(bg="yellow")
             Square.selected=True
@@ -182,11 +166,10 @@ class ChessApp(tk.Frame):
             self.selected_square=True
             self.selected_square_tuple=(Square.row, Square.column)
             self.selected_square_moves=self.PieceMove(Square)
-            print(self.selected_square_moves)
             try:
                 for item in self.selected_square_moves:
-                    self.SquareLabels[item[0]][item[1]].configure(bg="white")
-                    self.SquareLabels[item[0]][item[1]].update()
+                    self.Board[item[0]][item[1]].configure(bg="white")
+                    self.Board[item[0]][item[1]].update()
             except IndexError:
                 pass
 
@@ -201,92 +184,16 @@ class ChessApp(tk.Frame):
 
         elif not Square.selected and self.selected_square and Square.color==0:
             print("Move!!")
-            for item in self.selected_square_moves:
-                if Square.row==item[0] and Square.column==item[1]:
-                    if self.color_turn==1:
-                        if self.selected_piece=="Pawn":
-                            MovePiece(Square, "Pawn", self.BrownPawns)
-                        elif self.selected_piece=="Tower":
-                            MovePiece(Square, "Tower", self.BrownTowers)
-                        elif self.selected_piece=="Horse":
-                            MovePiece(Square, "Horse", self.BrownHorses)
-                        elif self.selected_piece=="Knight":
-                            MovePiece(Square, "Knight", self.BrownKnights)
-                        elif self.selected_piece=="King":
-                            MovePieceTwo(Square, "King", self.BrownKing)
-                        elif self.selected_piece=="Queen":
-                            MovePieceTwo(Square, "Queen", self.BrownQueen)
-
-                    elif self.color_turn==2:
-                        if self.selected_piece=="Pawn":
-                            MovePiece(Square, "Pawn", self.GrayPawns)
-                        elif self.selected_piece=="Tower":
-                            MovePiece(Square, "Tower", self.GrayTowers)
-                        elif self.selected_piece=="Horse":
-                            MovePiece(Square, "Horse", self.GrayHorses)
-                        elif self.selected_piece=="Knight":
-                            MovePiece(Square, "Knight", self.GrayKnights)
-                        elif self.selected_piece=="King":
-                            MovePieceTwo(Square, "King", self.GrayKing)
-                        elif self.selected_piece=="Queen":
-                            MovePieceTwo(Square, "Queen", self.GrayQueen)
-
-                    print(self.GrayPawns)
-                    self.selected_square=False
-                    self.selected_square_tuple=0
-                    self.selected_square_moves=0
-                    self.selected_piece=""
-                    Square.used = True
-                    if self.color_turn==1:
-                        self.color_turn=2
-                    elif self.color_turn==2:
-                        self.color_turn=1
-                    self.UpdateBoard()
+            self.ExecuteMove(Square)
+            Square.used = True
+            self.EndTurn()
+            self.UpdateBoard()
 
         elif not Square.selected and self.selected_square and Square.color!=self.color_turn:
             print("Eat!")
-            for item in self.selected_square_moves:
-                if Square.row==item[0] and Square.column==item[1]:
-                    self.eatpiece(Square)
-                    if self.color_turn==1:
-                        if self.selected_piece=="Pawn":
-                            MovePiece(Square, "Pawn", self.BrownPawns)
-                        elif self.selected_piece=="Tower":
-                            MovePiece(Square, "Tower", self.BrownTowers)
-                        elif self.selected_piece=="Horse":
-                            MovePiece(Square, "Horse", self.BrownHorses)
-                        elif self.selected_piece=="Knight":
-                            MovePiece(Square, "Knight", self.BrownKnights)
-                        elif self.selected_piece=="King":
-                            MovePieceTwo(Square, "King", self.BrownKing)
-                        elif self.selected_piece=="Queen":
-                            MovePieceTwo(Square, "Queen", self.BrownQueen)
-
-                    elif self.color_turn==2:
-                        if self.selected_piece=="Pawn":
-                            MovePiece(Square, "Pawn", self.GrayPawns)
-                        elif self.selected_piece=="Tower":
-                            MovePiece(Square, "Tower", self.GrayTowers)
-                        elif self.selected_piece=="Horse":
-                            MovePiece(Square, "Horse", self.GrayHorses)
-                        elif self.selected_piece=="Knight":
-                            MovePiece(Square, "Knight", self.GrayKnights)
-                        elif self.selected_piece=="King":
-                            MovePieceTwo(Square, "King", self.GrayKing)
-                        elif self.selected_piece=="Queen":
-                            MovePieceTwo(Square, "Queen", self.GrayQueen)
-
-                    self.selected_square=False
-                    self.selected_square_tuple=0
-                    self.selected_square_moves=0
-                    self.selected_piece=""
-                    if self.color_turn==1:
-                        self.color_turn=2
-                    elif self.color_turn==2:
-                        self.color_turn=1
-                    self.UpdateBoard()
-                else:
-                    pass
+            self.ExecuteMove(Square)
+            self.EndTurn()
+            self.UpdateBoard()
 
         elif not Square.selected and self.selected_square and Square.color==self.color_turn:
             print("Hello World! You broke the game!")
@@ -303,181 +210,152 @@ class ChessApp(tk.Frame):
             self.selected_piece=""
             self.UpdateBoard()
 
-    def eatpiece(self, Square):
-        def eatsetup(piecename, piecearr):
+    def EatPiece(self, Square):
+        def eatsetup(piecearr):
             for item in piecearr:
-                for move in self.selected_square_moves:
-                    if item==move:
-                        piecearr.remove(item)
-        def eatsetuptwo(piecename, piecelist):
-            for move in self.selected_square_moves:
-                if (Square.row==piecelist[0] and Square.column==piecelist[1]) and (Square.row==move[0] and Square.column==move[1]):
-                    piecelist.pop()
-                    piecelist.pop()
-        if Square.current_piece=="Pawn":
-            eatsetup("Pawn", self.BrownPawns)
-        elif Square.current_piece=="Horse":
-            eatsetup("Horse", self.BrownHorses)
-        elif Square.current_piece=="Tower":
-            eatsetup("Tower", self.BrownTowers)
-        elif Square.current_piece=="Knight":
-            eatsetup("Knight", self.BrownKnights)
-        elif Square.current_piece=="King":
-            eatsetuptwo("King", self.BrownKing)
-        elif Square.current_piece=="Queen":
-            eatsetuptwo("Queen", self.BrownQueen)
-
-        if Square.current_piece=="Pawn":
-            eatsetup("Pawn", self.GrayPawns)
-        elif Square.current_piece=="Horse":
-            eatsetup("Horse", self.GrayHorses)
-        elif Square.current_piece=="Tower":
-            eatsetup("Tower", self.GrayTowers)
-        elif Square.current_piece=="Knight":
-            eatsetup("Knight", self.GrayKnights)
-        elif Square.current_piece=="King":
-            eatsetuptwo("King", self.GrayKing)
-        elif Square.current_piece=="Queen":
-            eatsetuptwo("Queen", self.GrayQueen)
+                if item[0]==Square.row and item[1]==Square.column:
+                    piecearr.remove(item)
+        if Square.color==1:
+            eatsetup(self.BrownPiecesAlive[Square.current_piece])
+        elif Square.color==2:
+            eatsetup(self.GrayPiecesAlive[Square.current_piece])
 
     def PieceMove(self, Square):
-        def minoftwo(a, b):
+        def MinOfTwo(a, b):
             if a>b:
                 return b
             else:
                 return a
-        def itermove(a, b):
+        def IterMove(a, b):
             if a<0 or b<0:
                 return False
-            elif self.SquareLabels[a][b].current_piece!="" and self.SquareLabels[a][b].color==Square.color:
+            elif self.Board[a][b].current_piece!="" and self.Board[a][b].color==Square.color:
                 return False
-            elif self.SquareLabels[a][b].current_piece!="" and self.SquareLabels[a][b].color!=Square.color:
+            elif self.Board[a][b].current_piece!="" and self.Board[a][b].color!=Square.color:
                 movelist.append((a, b))
                 return False
             else:
                 movelist.append((a, b))
                 return True
-        def normalmove(a, b):
-            if self.SquareLabels[a][b].current_piece=="" or self.SquareLabels[a][b].color!=Square.color:
+        def NormalMove(a, b):
+            if self.Board[a][b].current_piece=="" or self.Board[a][b].color!=Square.color:
                 movelist.append((a, b))
-        def emptyspaceadd(a, b):
-            if self.SquareLabels[a][b].current_piece=="":
+        def EmptySpaceAdd(a, b):
+            if self.Board[a][b].current_piece=="":
                 movelist.append((a, b))
-        def possiblemove(a, b):
-            if self.SquareLabels[a][b].current_piece!="" and self.SquareLabels[a][b].color!=Square.color:
+        def PossibleMove(a, b):
+            if self.Board[a][b].current_piece!="" and self.Board[a][b].color!=Square.color:
                 movelist.append((a, b))
-        def horsemove(a, b):
-            if self.SquareLabels[a][b].current_piece=="" or self.SquareLabels[a][b].color!=Square.color:
+        def HorseMove(a, b):
+            if self.Board[a][b].current_piece=="" or self.Board[a][b].color!=Square.color:
                 movelist.append((a, b))
         movelist=[]
-        posy = int(Square.row)
-        posx = int(Square.column)
         if Square.current_piece=="Pawn":
             if Square.color==2:
-                emptyspaceadd(posy-1, posx)
+                EmptySpaceAdd(Square.row-1, Square.column)
                 if not Square.used:
-                    emptyspaceadd(posy-2, posx)
+                    EmptySpaceAdd(Square.row-2, Square.column)
                 try:
-                    possiblemove(posy-1, posx-1)
-                    possiblemove(posy-1, posx+1)
+                    PossibleMove(Square.row-1, Square.column-1)
+                    PossibleMove(Square.row-1, Square.column+1)
                 except IndexError:
                     pass
             elif Square.color==1:
-                emptyspaceadd(posy+1, posx)
+                EmptySpaceAdd(Square.row+1, Square.column)
                 if not Square.used:
-                    emptyspaceadd(posy+2, posx)
+                    EmptySpaceAdd(Square.row+2, Square.column)
                 try:
-                    possiblemove(posy+1, posx-1)
-                    possiblemove(posy+1, posx+1)
+                    PossibleMove(Square.row+1, Square.column-1)
+                    PossibleMove(Square.row+1, Square.column+1)
                 except IndexError:
                     pass
         elif Square.current_piece=="Horse":
-            if posy+2<=7 and posx+1<=7:
-                horsemove(posy+2, posx+1)
-            if posy+2<=7 and posx-1>=0:
-                horsemove(posy+2, posx-1)
-            if posy-2>=0 and posx+1<=7:
-                horsemove(posy-2, posx+1)
-            if posy-2>=0 and posx-1>=0:
-                horsemove(posy-2, posx-1)
-            if posy-1>=0 and posx-2>=0:
-                horsemove(posy-1, posx-2)
-            if posy-1>=0 and posx+2<=7:
-                horsemove(posy-1, posx+2)
-            if posy+1<=7 and posx-2>=0:
-                horsemove(posy+1, posx-2)
-            if posy+1<=7 and posx+2<=7:
-                horsemove(posy+1, posx+2)
+            if Square.row+2<=7 and Square.column+1<=7:
+                HorseMove(Square.row+2, Square.column+1)
+            if Square.row+2<=7 and Square.column-1>=0:
+                HorseMove(Square.row+2, Square.column-1)
+            if Square.row-2>=0 and Square.column+1<=7:
+                HorseMove(Square.row-2, Square.column+1)
+            if Square.row-2>=0 and Square.column-1>=0:
+                HorseMove(Square.row-2, Square.column-1)
+            if Square.row-1>=0 and Square.column-2>=0:
+                HorseMove(Square.row-1, Square.column-2)
+            if Square.row-1>=0 and Square.column+2<=7:
+                HorseMove(Square.row-1, Square.column+2)
+            if Square.row+1<=7 and Square.column-2>=0:
+                HorseMove(Square.row+1, Square.column-2)
+            if Square.row+1<=7 and Square.column+2<=7:
+                HorseMove(Square.row+1, Square.column+2)
         elif Square.current_piece=="Tower":
             for i in range(Square.row-1, -1, -1):
-                if not itermove(i, posx):
+                if not IterMove(i, Square.column):
                     break
             for i in range(Square.column-1, -1, -1):
-                if not itermove(posy, i):
+                if not IterMove(Square.row, i):
                     break
             for i in range(1, 8-Square.row):
-                if not itermove(posy+i, posx):
+                if not IterMove(Square.row+i, Square.column):
                     break
             for i in range(1, 8-Square.column):
-                if not itermove(posy, posx+i):
+                if not IterMove(Square.row, Square.column+i):
                     break
         elif Square.current_piece=="Knight":
-            for i in range(1, minoftwo(Square.row, Square.column)+1):
-                if not itermove(posy-i, posx-i):
+            for i in range(1, MinOfTwo(Square.row, Square.column)+1):
+                if not IterMove(Square.row-i, Square.column-i):
                     break
-            for i in range(1, minoftwo(Square.row, 7-Square.column)+1):
-                if not itermove(posy-i, posx+i):
+            for i in range(1, MinOfTwo(Square.row, 7-Square.column)+1):
+                if not IterMove(Square.row-i, Square.column+i):
                     break
-            for i in range(1, minoftwo(7-Square.row, Square.column)+1):
-                if not itermove(posy+i, posx-i):
+            for i in range(1, MinOfTwo(7-Square.row, Square.column)+1):
+                if not IterMove(Square.row+i, Square.column-i):
                     break
-            for i in range(1, minoftwo(7-Square.row, 7-Square.column)+1):
-                if not itermove(posy+i, posx+i):
+            for i in range(1, MinOfTwo(7-Square.row, 7-Square.column)+1):
+                if not IterMove(Square.row+i, Square.column+i):
                     break
         elif Square.current_piece=="King":
             try:
-                if posy-1>=0:
-                    normalmove(posy-1, posx)
-                if posy+1<=7:
-                    normalmove(posy+1, posx)
-                if posx-1>=0:
-                    normalmove(posy, posx-1)
-                if posx+1<=7:
-                    normalmove(posy, posx+1)
-                if posy-1>=0 and posx-1>=0:
-                    normalmove(posy-1, posx-1)
-                if posy+1<=7 and posx-1>=0:
-                    normalmove(posy+1, posx-1)
-                if posy-1>=0 and posx+1<=7:
-                    normalmove(posy-1, posx+1)
-                if posy+1<=7 and posx+1<=7:
-                    normalmove(posy+1, posx+1)
+                if Square.row-1>=0:
+                    NormalMove(Square.row-1, Square.column)
+                if Square.row+1<=7:
+                    NormalMove(Square.row+1, Square.column)
+                if Square.column-1>=0:
+                    NormalMove(Square.row, Square.column-1)
+                if Square.column+1<=7:
+                    NormalMove(Square.row, Square.column+1)
+                if Square.row-1>=0 and Square.column-1>=0:
+                    NormalMove(Square.row-1, Square.column-1)
+                if Square.row+1<=7 and Square.column-1>=0:
+                    NormalMove(Square.row+1, Square.column-1)
+                if Square.row-1>=0 and Square.column+1<=7:
+                    NormalMove(Square.row-1, Square.column+1)
+                if Square.row+1<=7 and Square.column+1<=7:
+                    NormalMove(Square.row+1, Square.column+1)
             except IndexError:
                 pass
         elif Square.current_piece=="Queen":
             for i in range(Square.row-1, -1, -1):
-                if not itermove(i, posx):
+                if not IterMove(i, Square.column):
                     break
             for i in range(Square.column-1, -1, -1):
-                if not itermove(posy, i):
+                if not IterMove(Square.row, i):
                     break
             for i in range(1, 8-Square.row):
-                if not itermove(posy+i, posx):
+                if not IterMove(Square.row+i, Square.column):
                     break
             for i in range(1, 8-Square.column):
-                if not itermove(posy, posx+i):
+                if not IterMove(Square.row, Square.column+i):
                     break
-            for i in range(1, minoftwo(Square.row, Square.column)+1):
-                if not itermove(posy-i, posx-i):
+            for i in range(1, MinOfTwo(Square.row, Square.column)+1):
+                if not IterMove(Square.row-i, Square.column-i):
                     break
-            for i in range(1, minoftwo(Square.row, 7-Square.column)+1):
-                if not itermove(posy-i, posx+i):
+            for i in range(1, MinOfTwo(Square.row, 7-Square.column)+1):
+                if not IterMove(Square.row-i, Square.column+i):
                     break
-            for i in range(1, minoftwo(7-Square.row, Square.column)+1):
-                if not itermove(posy+i, posx-i):
+            for i in range(1, MinOfTwo(7-Square.row, Square.column)+1):
+                if not IterMove(Square.row+i, Square.column-i):
                     break
-            for i in range(1, minoftwo(7-Square.row, 7-Square.column)+1):
-                if not itermove(posy+i, posx+i):
+            for i in range(1, MinOfTwo(7-Square.row, 7-Square.column)+1):
+                if not IterMove(Square.row+i, Square.column+i):
                     break
         return movelist
 
